@@ -32,6 +32,11 @@ export const create = mutation({
             userId,
             joincode
         })
+        await ctx.db.insert("channels", {
+            name: "general",
+            workspaceId: workSpaceId    
+        })
+
         await ctx.db.insert("members", {
             userId,
             workspaceId: workSpaceId,
@@ -117,14 +122,14 @@ export const update = mutation({
             .withIndex("by_workspace_id_and_user_id", (q) => q.eq("workspaceId", args.id).eq("userId", userId),
             )
             .unique()
-       
-            if(!member || member.role !=="admin"){
-                     throw new Error("Unauthorized")
-            }
-     
-            await ctx.db.patch(args.id, { name: args.name })  
-            
-            return args.id
+
+        if (!member || member.role !== "admin") {
+            throw new Error("Unauthorized")
+        }
+
+        await ctx.db.patch(args.id, { name: args.name })
+
+        return args.id
     }
 })
 export const remove = mutation({
@@ -143,24 +148,24 @@ export const remove = mutation({
             .withIndex("by_workspace_id_and_user_id", (q) => q.eq("workspaceId", args.id).eq("userId", userId),
             )
             .unique()
-       
-            if(!member || member.role !=="admin"){
-                     throw new Error("Unauthorized")
-            }
 
-            const [members] = await Promise.all([
-                ctx.db
-                  .query("members")
-                  .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
-                  .collect()
-            ])
+        if (!member || member.role !== "admin") {
+            throw new Error("Unauthorized")
+        }
 
-            for (const member of members) {
+        const [members] = await Promise.all([
+            ctx.db
+                .query("members")
+                .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
+                .collect()
+        ])
+
+        for (const member of members) {
             await ctx.db.delete(member._id);
         }
-     
-            await ctx.db.delete(args.id)
-            
-            return args.id
+
+        await ctx.db.delete(args.id)
+
+        return args.id
     }
 })
