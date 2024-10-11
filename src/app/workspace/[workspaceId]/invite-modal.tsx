@@ -39,12 +39,7 @@ export const InviteModal = ({
     mutate(
       { workspaceId },
       {
-/*************  ✨ Codeium Command ⭐  *************/
-        /**
-         * Called when the new join code has been regenerated successfully.
-         * Shows a success toast.
-         */
-/******  55ef29c9-3e80-4e88-8ced-60e2b240502c  *******/
+
         onSuccess: () => {
           toast.success("New code regenerated successfully");
         },

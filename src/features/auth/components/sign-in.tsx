@@ -79,7 +79,7 @@ const onProviderSignIn = (value:"github"|"google") => {
             type="password"
             required
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" >
             Continue
           </Button>
         </form>

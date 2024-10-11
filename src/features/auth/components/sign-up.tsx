@@ -47,6 +47,7 @@ export const SignUpcard = ({setState}:SignUpCardProps) => {
     })
   }
 
+
   const onProviderSignUp = (value:"github"|"google") => {
     setPending(true)
     signIn(value)
