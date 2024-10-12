@@ -14,6 +14,7 @@ import { ImageIcon, Smile } from "lucide-react";
 import { Hint } from "./hint";
 import { Delta, Op } from "quill/core";
 import { cn } from "@/lib/utils";
+import { EmojiPopover } from "./emoji-popover";
 
 type EditorValue = {
   image: File | null;
@@ -70,29 +71,30 @@ const Editor = ({
       theme: "snow",
       placeholder: placeholderRef.current,
       modules: {
-        toolbar:[
-          ["bold","italic","strike"],
+        toolbar: [
+          ["bold", "italic", "strike"],
           ["link"],
-          [{list:"ordered"}, {list:"bullet"}],
+          [{ list: "ordered" }, { list: "bullet" }],
         ],
-        keyboard:{
-          bindings:{
-            enter:{
-              key:"Enter",
-              handler:()=>{return}
-            }
+        keyboard: {
+          bindings: {
+            enter: {
+              key: "Enter",
+              handler: () => {
+                return;
+              },
+            },
           },
-          shift_enter:{
-               key:"Enter",
-               shiftKey:true,
-               handler:()=>{
-                quill.insertText(quill.getSelection()?.index||0,"\n");
-               }
-          }
-        }
-      }
+          shift_enter: {
+            key: "Enter",
+            shiftKey: true,
+            handler: () => {
+              quill.insertText(quill.getSelection()?.index || 0, "\n");
+            },
+          },
+        },
+      },
     };
-
 
     const quill = new Quill(editorContainer, options);
     quillRef.current = quill;
@@ -109,8 +111,6 @@ const Editor = ({
       setText(quill.getText());
     });
 
-
-
     return () => {
       quill.off(Quill.events.TEXT_CHANGE);
       if (container) {
@@ -125,14 +125,20 @@ const Editor = ({
     };
   }, [innerRef]);
 
-  const toggleToolBar = ()=>{
-    setIsToolbarVisible((current)=>!current)
+  const toggleToolBar = () => {
+    setIsToolbarVisible((current) => !current);
     const toolbarElement = containerRef.current?.querySelector(".ql-toolbar");
 
-    if(toolbarElement){
+    if (toolbarElement) {
       toolbarElement.classList.toggle("hidden");
     }
-  }
+  };
+
+  const onEmojiSelect = (emoji: any) => {
+    const quill = quillRef.current;
+
+    quill?.insertText(quill?.getSelection()?.index || 0, emoji.native)
+  };
 
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
@@ -141,7 +147,9 @@ const Editor = ({
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-full ql-custom" />
         <div className="flex px-2 pb-2 z-[5]">
-          <Hint label={isToolbarVisible ? "Hide formatting" : "Show formatting"}>
+          <Hint
+            label={isToolbarVisible ? "Hide formatting" : "Show formatting"}
+          >
             <Button
               disabled={disabled}
               variant="ghost"
@@ -151,16 +159,11 @@ const Editor = ({
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="Emoji">
-            <Button
-              disabled={disabled}
-              variant="ghost"
-              size="iconSm"
-              onClick={() => {}}
-            >
+          <EmojiPopover onEmojiSelect={onEmojiSelect}>
+            <Button disabled={disabled} variant="ghost" size="iconSm">
               <Smile className="size-4" />
             </Button>
-          </Hint>
+          </EmojiPopover>
           {variant === "create" && (
             <Hint label="Image">
               <Button
@@ -210,11 +213,18 @@ const Editor = ({
           )}
         </div>
       </div>
-      <div className="p-2 text-[10px] text-muted-foreground flex justify-end">
-        <p>
-          <strong>Shift+Return</strong> to add a new line
-        </p>
-      </div>
+      {variant === "create" && (
+        <div
+          className={cn(
+            "p-2 text-[10px] text-muted-foreground flex justify-end opacity-0 transition",
+            !isEmpty && "opacity-100"
+          )}
+        >
+          <p>
+            <strong>Shift+Return</strong> to add a new line
+          </p>
+        </div>
+      )}
     </div>
   );
 };
