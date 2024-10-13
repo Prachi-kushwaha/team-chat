@@ -4,12 +4,12 @@ import { useCallback, useMemo, useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-type RequestType = {body:string, image?:Id<"_storage">, workspaceId:Id<"workspaces">, channelId?:Id<"channels">, parentMessageId?:Id<"messages">};
-type ResponseType = Id<"messages">| null;
+type RequestType = { body: string, image?: Id<"_storage">, workspaceId: Id<"workspaces">, channelId?: Id<"channels">, parentMessageId?: Id<"messages">, conversationId?: Id<"conversations"> };
+type ResponseType = Id<"messages"> | null;
 
 type options = {
-  onSuccess?: (data:ResponseType) => void;
-  onError?: (error:Error) => void;
+  onSuccess?: (data: ResponseType) => void;
+  onError?: (error: Error) => void;
   onSettled?: () => void;
   throwError?: boolean;
 };
@@ -17,12 +17,12 @@ type options = {
 export const useCreateMessage = () => {
   const [data, setData] = useState<ResponseType>(null)
   const [error, setError] = useState<Error | null>(null)
-  const [status, setStatus] = useState<"success"|"pending"|"error"|"settled"|null>(null)
+  const [status, setStatus] = useState<"success" | "pending" | "error" | "settled" | null>(null)
 
-  const isPending = useMemo(()=>status==="pending", [status])
-  const isSuccess = useMemo(()=>status==="success", [status])
-  const isSettled = useMemo(()=>status==="settled", [status])
-  const isError = useMemo(()=>status==="error", [status])
+  const isPending = useMemo(() => status === "pending", [status])
+  const isSuccess = useMemo(() => status === "success", [status])
+  const isSettled = useMemo(() => status === "settled", [status])
+  const isError = useMemo(() => status === "error", [status])
 
 
   const mutation = useMutation(api.messages.create);
@@ -36,11 +36,11 @@ export const useCreateMessage = () => {
         const response = await mutation(values);
         options?.onSuccess?.(response);
         return response
-      } catch(error) {
+      } catch (error) {
         setError("error")
         options?.onError?.(error as Error);
 
-        if(options?.throwError) {
+        if (options?.throwError) {
           throw error
         }
       } finally {
@@ -51,13 +51,13 @@ export const useCreateMessage = () => {
     },
     [mutation]);
 
-    return {
-        mutate,
-        data,
-        error, 
-        isPending,
-        isSettled,
-        isSuccess,
-        isError
-    }
+  return {
+    mutate,
+    data,
+    error,
+    isPending,
+    isSettled,
+    isSuccess,
+    isError
+  }
 };
