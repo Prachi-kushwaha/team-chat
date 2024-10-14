@@ -28,7 +28,7 @@ interface MessageProps {
   setEditingId: (id: Id<"messages"> | null) => void;
   hideThreadButton?: boolean;
   threadCount?: number;
-  thradImage?: string;
+  threadImage?: string;
   threadTimestamp?: number;
 }
 
@@ -52,7 +52,7 @@ export const Message = ({
   setEditingId,
   hideThreadButton,
   threadCount,
-  thradImage,
+  threadImage,
   threadTimestamp,
 }: MessageProps) => {
   if (isCompact) {
@@ -75,9 +75,7 @@ export const Message = ({
       </div>
     );
   }
-
   const avatarFallback = authorName.charAt(0).toUpperCase();
-
   return (
     <div className="flex flex-col gap-2 p-1.5 px-5 hover:bg-gray-100/56 group relative">
       <div className="flex items-start gap-2">

@@ -8,7 +8,7 @@ const BATCH_SIZE = 20
 
 interface UseGetMessagesProps {
     channelId?: Id<"channels">
-    conversationId?: Id<"conversations">
+    conversationId?: Id<"conversation">
     parentMessageId?: Id<"messages">
 }
 

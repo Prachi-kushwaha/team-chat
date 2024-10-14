@@ -31,7 +31,7 @@ export const Header = ({title}:HeaderProps)=>{
 
     const handleEditOpen = ()=>{
         if(member?.role !== "admin") return;
-        setEditOpen(value);
+        setEditOpen(true);
     }
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
