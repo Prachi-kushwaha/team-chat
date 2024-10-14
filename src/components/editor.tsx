@@ -47,7 +47,7 @@ const Editor = ({
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const submitRef = useRef(onsubmit);
+  const submitRef = useRef(onSubmit);
   const placeholderRef = useRef(placeholder);
   const quillRef = useRef<Quill | null>(null);
   const defaultValueRef = useRef(defaultValue);
@@ -94,7 +94,7 @@ const Editor = ({
                 if (isEmpty) return;
 
                 const body = JSON.stringify(quill.getContents());
-                submitRef.current?.({ body, image:addedImage });
+                submitRef.current?.({ body, image: addedImage });
               },
             },
           },
@@ -116,6 +116,15 @@ const Editor = ({
     if (innerRef) {
       innerRef.current = quill;
     }
+    // here i added something extra
+
+    const handleTextChange = () => {
+      setText(quill.getText());
+    };
+  
+    quill.on(Quill.events.TEXT_CHANGE, handleTextChange);
+
+    // form here
 
     quill.setContents(defaultValueRef.current);
     setText(quill.getText());
