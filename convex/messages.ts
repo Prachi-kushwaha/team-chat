@@ -56,6 +56,56 @@ const getMember = async (ctx: QueryCtx, workspaceId: Id<"workspaces">, userId: I
         .unique()
 }
 
+export const update = mutation({
+    args: {
+        id: v.id("messages"),
+        body: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const userId = await auth.getUserId(ctx)
+        if (!userId) {
+            throw new Error("unauthorized")
+        }
+        const message = await ctx.db.get(args.id)
+        if (!message) {
+            throw new Error("message not found")
+        }
+        const member = await getMember(ctx, message.workspaceId, userId)
+        if (!member || member._id !== message.memberId) {
+            throw new Error("unauthorized")
+        }
+        await ctx.db.patch(args.id, {
+            body: args.body,
+            updatedAt: Date.now()
+        })
+        return args.id;
+    }
+
+})
+
+export const remove = mutation({
+    args: {
+        id: v.id("messages")
+    },
+    handler: async (ctx, args) => {
+        const userId = await auth.getUserId(ctx)
+        if (!userId) {
+            throw new Error("unauthorized")
+        }
+        const message = await ctx.db.get(args.id)
+        if (!message) {
+            throw new Error("message not found")
+        }
+        const member = await getMember(ctx, message.workspaceId, userId)
+        if (!member || member._id !== message.memberId) {
+            throw new Error("unauthorized")
+        }
+        await ctx.db.delete(args.id)
+        return args.id;
+    }
+
+})
+
 export const get = query({
     args: {
         channelId: v.optional(v.id("channels")),
@@ -133,22 +183,22 @@ export const get = query({
                             )[]
                         )
 
-                        const reactionsWithoutMemberIdProperty = dedupedReactions.map(({memberId, ...rest}) => rest,)
+                        const reactionsWithoutMemberIdProperty = dedupedReactions.map(({ memberId, ...rest }) => rest,)
 
                         return {
-                               ...message,
-                               image,
-                               member,
-                               user, 
-                               reactions:reactionsWithoutMemberIdProperty,
-                               threadCount:thread.count,
-                               threadImage:thread.image,
-                               thredTimeStamp:thread.timeStamp
+                            ...message,
+                            image,
+                            member,
+                            user,
+                            reactions: reactionsWithoutMemberIdProperty,
+                            threadCount: thread.count,
+                            threadImage: thread.image,
+                            thredTimeStamp: thread.timeStamp
 
                         }
                     })
                 )
-            ).filter((message) : message is NonNullable<typeof message> => message !== null)
+            ).filter((message): message is NonNullable<typeof message> => message !== null)
 
         }
     }
