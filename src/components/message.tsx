@@ -9,9 +9,7 @@ import { useUpdateMessage } from "@/features/messages/api/use-update-message";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useRemoveMessage } from "@/features/messages/api/use-remove-message";
-import { remove } from '../../convex/message';
 import { useConfirm } from "@/hooks/use-confirm";
-import { useToggle } from "react-use";
 import { useToggleReaction } from "@/features/reactions/api/use-toggle-reaction";
 import { Reactions } from "./reactions";
 import { usePanel } from "@/hooks/use-pannel";
@@ -70,12 +68,12 @@ export const Message = ({
   threadName,
   threadTimestamp,
 }: MessageProps) => {
-  const {parentMessageId,onOpenMessage, onClose} = usePanel()
+  const {parentMessageId,onOpenMessage,onOpenProfile, onClose} = usePanel()
   const [ConfirmDialog, confirm] = useConfirm("are you sure", "this will delete the message");
   const {mutate: updateMessage, isPending:isUpdatingMessage} = useUpdateMessage()
   const {mutate:removeMessage, isPending:isRemovingMessage} = useRemoveMessage()
   const {mutate:toggleReaction, isPending:isTogglingReaction} = useToggleReaction()
-  const isPending = isUpdatingMessage;
+  const isPending = isUpdatingMessage|| isTogglingReaction;
 
   const handleReaction=(value:string)=>{
     toggleReaction({messageId: id, value}, {
@@ -182,7 +180,7 @@ export const Message = ({
         isRemovingMessage && "bg-rose-500/50 transform transition-all scale-y-0 origin-bottom duration-200"
       )}>
       <div className="flex items-start gap-2">
-        <button>
+        <button onClick={()=>onOpenProfile(memberId)}>
           <Avatar >
             <AvatarImage  src={authorImage} />
             <AvatarFallback>
@@ -204,7 +202,7 @@ export const Message = ({
         <div className="flex flex-col w-full overflow-hidden">
         <div className="text-sm">
           <button
-            onClick={() => {}}
+            onClick={()=>onOpenProfile(memberId)}
             className="font-bold text-primary hover:underline"
           >
             {authorName}
