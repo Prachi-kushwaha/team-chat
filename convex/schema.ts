@@ -22,7 +22,7 @@ const schema = defineSchema({
     workspaceId: v.id("workspaces")
   })
     .index("by_workspace_id", ["workspaceId"]),
-  conversation: defineTable({
+  conversations: defineTable({
     workspaceId: v.id("workspaces"),
     memberOneId: v.id("members"),
     memberTwoId: v.id("members")

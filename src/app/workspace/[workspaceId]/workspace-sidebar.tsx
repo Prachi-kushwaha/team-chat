@@ -16,8 +16,10 @@ import { useGetMembers } from "@/features/members/api/use-get-members";
 import { UserItem } from "./user-item";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 import { useChannelId } from "@/hooks/use-channel-id";
+import { useMemberId } from "@/hooks/use-member-id";
 
 export const WorkSpaceSidebar = () => {
+  const memberId = useMemberId()
   const channelId = useChannelId()
   const workspaceId = useWorkspaceId();
   const [_open, setOpen ] = useCreateChannelModal();
@@ -79,6 +81,7 @@ export const WorkSpaceSidebar = () => {
             id={item._id}
             label={item.user.name}
             image={item.user.image}
+            variant={item._id===memberId? "active": "default"}
           />
        
       ))}
@@ -87,6 +90,4 @@ export const WorkSpaceSidebar = () => {
   );
 };
 
-function UseGetWorkspace() {
-  throw new Error("Function not implemented.");
-}
+
