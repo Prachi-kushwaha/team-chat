@@ -1,7 +1,7 @@
 import { v } from "convex/values"
 import { Id } from "./_generated/dataModel"
 import { mutation, QueryCtx } from "./_generated/server"
-import { auth } from "./auth"
+import { getAuthUserId } from "@convex-dev/auth/server"
 
 const getMember = async (ctx: QueryCtx, workspaceId: Id<"workspaces">, userId: Id<"users">) => {
     return ctx.db
@@ -16,7 +16,7 @@ export const toggle = mutation({
         value: v.string()
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
         if (!userId) {
             throw new Error("Unauthorized")
         }

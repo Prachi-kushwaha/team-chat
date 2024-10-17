@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query, QueryCtx } from "./_generated/server";
-import { auth } from "./auth";
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { paginationOptsValidator } from "convex/server";
 const populateThread = async (ctx: QueryCtx, messageId: Id<"messages">) => {
@@ -72,7 +72,7 @@ export const update = mutation({
     body: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx)
     if (!userId) {
       throw new Error("unauthorized");
     }
@@ -97,7 +97,7 @@ export const remove = mutation({
     id: v.id("messages"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx)
     if (!userId) {
       throw new Error("unauthorized");
     }
@@ -119,7 +119,7 @@ export const getById = query({
     id: v.id("messages"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx)
 
     if (!userId) {
       return null;
@@ -204,7 +204,7 @@ export const get = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx)
     if (!userId) {
       throw new Error("unauthorized");
     }
@@ -314,7 +314,7 @@ export const create = mutation({
   },
 
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx)
     if (!userId) {
       throw new Error("unauthorized");
     }

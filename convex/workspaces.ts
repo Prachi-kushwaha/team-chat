@@ -1,7 +1,8 @@
 
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { auth } from "./auth";
+
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 const generateCode = () => {
     const code = Array.from(
@@ -20,7 +21,7 @@ export const join = mutation({
         workspaceId: v.id("workspaces")
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if(!userId){
             throw new Error("Unauthorized")
@@ -59,7 +60,7 @@ export const newJoinCode = mutation({
         workspaceId : v.id("workspaces"),
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
         if(!userId){
          throw new Error("Unauthorized")
         }
@@ -86,7 +87,7 @@ export const create = mutation({
         name: v.string(),
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             throw new Error("Unauthorized")
@@ -123,7 +124,7 @@ export const getWorkspaces = query({
 export const get = query({
     args: {},
     handler: async (ctx) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             return []
@@ -152,7 +153,7 @@ export const get = query({
 export const getInfoById = query({
     args: { id: v.id("workspaces") },
     handler:async(ctx, args)=>{
-        const userId = await auth.getUserId(ctx);
+        const userId = await getAuthUserId(ctx)
         if(!userId){
             return null
         }
@@ -175,7 +176,7 @@ export const getInfoById = query({
 export const getById = query({
     args: { id: v.id("workspaces") },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx);
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             throw new Error("Unauthorized"); // Ensure user is authenticated
@@ -201,7 +202,7 @@ export const update = mutation({
         name: v.string()
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx);
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             throw new Error("Unauthorized"); // Ensure user is authenticated
@@ -227,7 +228,7 @@ export const remove = mutation({
         id: v.id("workspaces")
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx);
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             throw new Error("Unauthorized"); // Ensure user is authenticated

@@ -1,7 +1,7 @@
 
 import { v } from "convex/values";
 import { mutation, query, QueryCtx } from "./_generated/server";
-import { auth } from "./auth";
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { Id } from "./_generated/dataModel";
 
 const populateUser = (ctx: QueryCtx, id: Id<"users">) => {
@@ -13,7 +13,7 @@ export const getById = query({
         id: v.id("members")
     },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             return null
@@ -50,7 +50,7 @@ export const getById = query({
 export const get = query({
     args: { workspaceId: v.id("workspaces") },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
         if (!userId) {
             return [];
         }
@@ -89,7 +89,7 @@ export const get = query({
 export const current = query({
     args: { workspaceId: v.id("workspaces") },
     handler: async (ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if (!userId) {
             return null
@@ -117,7 +117,7 @@ export const update = mutation({
         role: v.union(v.literal("admin"), v.literal("member"))
     },
     handler: async(ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if(!userId){
             throw new Error ("unauthorized")
@@ -152,7 +152,7 @@ export const remove = mutation({
         id: v.id("members"),
     },
     handler: async(ctx, args) => {
-        const userId = await auth.getUserId(ctx)
+        const userId = await getAuthUserId(ctx)
 
         if(!userId){
             throw new Error ("unauthorized")
