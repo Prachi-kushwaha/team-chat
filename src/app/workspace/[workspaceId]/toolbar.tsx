@@ -15,8 +15,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import Link from "next/link";
-import ChannelIdPage from './channel/[channelId]/page';
+
 
 export const Toolbar = () => {
   const workspaceId = useWorkspaceId();

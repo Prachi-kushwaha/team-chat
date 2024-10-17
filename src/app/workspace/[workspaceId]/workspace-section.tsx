@@ -14,7 +14,6 @@ interface WorkspaceSectionProps {
 export const WorkspaceSection = ({
   children,
   label,
-  hint,
   onNew,
 }: WorkspaceSectionProps) => {
     const [on, toggle] = useToggle(true)

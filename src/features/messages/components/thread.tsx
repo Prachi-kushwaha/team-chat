@@ -271,6 +271,7 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
              innerRef={editorRef}
              disabled={isPending}
              placeholder="Reply..."
+             onCancel={onClose}
         />
       </div>
     </div>

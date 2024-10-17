@@ -26,7 +26,7 @@ interface SideBarItemsProps {
   label: string;
   id: string;
   icon: LucideIcon | IconType;
-  variant:VariantProps<typeof sidebarItemVariants>["variant"]
+  variant?:VariantProps<typeof sidebarItemVariants>["variant"]
 }
 
 

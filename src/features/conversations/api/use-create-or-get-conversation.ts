@@ -5,7 +5,7 @@ import { api } from "../../../../convex/_generated/api";
 import {Id } from "../../../../convex/_generated/dataModel";
 
 type RequestType = { memberId:Id<"members">, workspaceId: Id<"workspaces"> };
-type ResponseType = Id<"conversation"> | null;
+type ResponseType = Id<"conversations"> | null;
 
 type options = {
   onSuccess?: (data: ResponseType) => void;
@@ -37,7 +37,7 @@ export const useCreateOrGetConversation = () => {
         options?.onSuccess?.(response);
         return response
       } catch (error) {
-        setError("error")
+        setError(error as Error)
         options?.onError?.(error as Error);
 
         if (options?.throwError) {

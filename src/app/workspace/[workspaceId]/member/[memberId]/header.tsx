@@ -8,7 +8,7 @@ interface HeaderProps{
     memberImage?:string,
     onClick?:()=>void
 }
-export const Header = ({memberName="Member", memberImage, onClick}:HeaderProps)=>{
+export const Header = ({memberName="Member", memberImage}:HeaderProps)=>{
    const avatarFallback = memberName.charAt(0).toUpperCase()
 
     return(

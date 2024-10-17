@@ -162,7 +162,7 @@ export const Message = ({
           handleThread = {()=>onOpenMessage(id)}
           handleDelete={handleRemove}
           handleReaction={handleReaction}
-          hideThreadButton={hideThreadButton}
+          hideThreadButton={hideThreadButton??false}
 
         />
       )}
@@ -237,7 +237,7 @@ export const Message = ({
           handleThread = {()=>onOpenMessage(id)}
           handleDelete={handleRemove}
           handleReaction={handleReaction}
-          hideThreadButton={hideThreadButton}
+          hideThreadButton={hideThreadButton??false}
        />
       )}
     </div>

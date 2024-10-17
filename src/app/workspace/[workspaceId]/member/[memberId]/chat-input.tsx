@@ -75,13 +75,9 @@ export const ChatInput = ({ placeholder, conversationId }: ChatInputProps) => {
 
       await createMessage(values, { throwError: true });
 
-      //  await createMessage({
-      //     workspaceId,
-      //     conversationId,
-      //     body,
-      //   }, {throwError:true})
+     
       setEditorKey((prevKey) => prevKey + 1);
-    } catch (error) {
+    } catch {
       toast.error("failed to send messages");
     } finally {
       setIsPending(false);
@@ -97,6 +93,7 @@ export const ChatInput = ({ placeholder, conversationId }: ChatInputProps) => {
         onSubmit={handleSubmit}
         disabled={isPending}
         innerRef={editorRef}
+        onCancel={() => editorRef.current?.enable(true)}
       />
     </div>
   );

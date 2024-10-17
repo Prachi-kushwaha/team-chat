@@ -37,7 +37,7 @@ export const useUpdateMessage = () => {
         options?.onSuccess?.(response);
         return response
       } catch (error) {
-        setError("error")
+        setError(error as Error)
         options?.onError?.(error as Error);
 
         if (options?.throwError) {

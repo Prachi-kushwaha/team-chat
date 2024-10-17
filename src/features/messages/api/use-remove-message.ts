@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-type RequestType = { body: string};
+type RequestType = { id: Id<"messages"> };
 type ResponseType = Id<"messages"> | null;
 
 type options = {
@@ -37,7 +37,7 @@ export const useRemoveMessage = () => {
         options?.onSuccess?.(response);
         return response
       } catch (error) {
-        setError("error")
+        setError(error as Error)
         options?.onError?.(error as Error);
 
         if (options?.throwError) {

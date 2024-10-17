@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Picker,{BaseEmoji} from "@emoji-mart/react"
+import Picker from "@emoji-mart/react"
 import data from "@emoji-mart/data"
 import {
     Popover,
@@ -12,7 +12,7 @@ import {
   interface EmojiPopoverProps{
       children:React.ReactNode
       hint?:string
-      onEmojiSelect:(emoji:BaseEmoji)=>void
+      onEmojiSelect:(emoji:any)=>void
   }
 
 
@@ -20,7 +20,7 @@ import {
    const [popoverOpen, setPopoverOpen] = useState(false)
    const [tooltipOpen, setTooltipOpen] = useState(false)
 
-    const onSelect = (emoji:BaseEmoji)=>{
+    const onSelect = (emoji:any)=>{
     onEmojiSelect(emoji) 
      setPopoverOpen(false)
 
