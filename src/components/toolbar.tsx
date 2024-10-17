@@ -1,4 +1,4 @@
-import { isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
+
 import { Button } from "./ui/button";
 import { MessageSquareTextIcon, Pencil, Smile, Trash } from "lucide-react";
 import { Hint } from "./hint";
